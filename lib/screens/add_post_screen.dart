@@ -5,10 +5,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:find_it/providers/user_provider.dart';
 import 'package:find_it/resources/firestore_method.dart';
-import 'package:find_it/screens/found_item_screen.dart';
-import 'package:find_it/screens/lost_item_screen.dart';
 import 'package:find_it/utils/utils.dart';
 import 'package:provider/provider.dart';
+
+import '../responsive/reponsive_layout_screen.dart';
 
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({super.key});
@@ -95,14 +95,14 @@ class _AddPostScreenState extends State<AddPostScreen> {
         if(isLost==true) {
           Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => const LostItemsScreen()
+            builder: (context) => const MobileScreenLayout()
           ),
           );
         }
         else {
           Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => const FoundItemsScreen()
+            builder: (context) => const MobileScreenLayout()
           ),
           );
         }
