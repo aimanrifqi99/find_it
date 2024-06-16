@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1054144417280",
+    "project_id": "findit-appl",
+    "storage_bucket": "findit-appl.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1054144417280:android:af6207e4497618586a92e5",
+        "android_client_info": {
+          "package_name": "com.example.find_it"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwW-iJjW_ovhS8A5D164PG5pEz8A1tbjQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
