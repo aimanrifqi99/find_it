@@ -10,7 +10,6 @@ class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 

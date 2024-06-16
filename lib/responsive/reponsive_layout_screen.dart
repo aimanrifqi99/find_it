@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:find_it/providers/user_provider.dart'; // Import UserProvider
 import 'package:find_it/utils/global_variable.dart';
+import 'package:provider/provider.dart'; // Import Provider package
 
 class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({Key? key}) : super(key: key);
@@ -17,6 +19,13 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   void initState() {
     super.initState();
     pageController = PageController();
+    addData();
+  }
+
+  // Method to fetch user data
+  addData() async {
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    await userProvider.refreshUser();
   }
 
   @override
@@ -32,7 +41,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   }
 
   void navigationTapped(int page) {
-    //Animating Page
+    // Animating Page
     pageController.jumpToPage(page);
   }
 
@@ -41,8 +50,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue, // Set your preferred color
-        title:const Text(
-          'Find Your Lost Items ',
+        title: const Text(
+          'Find Your Lost Items',
           style: TextStyle(
             color: Colors.white,
             fontSize: 20,
@@ -75,12 +84,13 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
             backgroundColor: Colors.white,
           ),
           BottomNavigationBarItem(
-              icon: Icon(
-                Icons.add_circle,
-                color: (_page == 2) ? Colors.grey : Colors.black,
-              ),
-              label: 'Add Post',
-              backgroundColor: Colors.white),
+            icon: Icon(
+              Icons.add_circle,
+              color: (_page == 2) ? Colors.grey : Colors.black,
+            ),
+            label: 'Add Post',
+            backgroundColor: Colors.white,
+          ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.person,

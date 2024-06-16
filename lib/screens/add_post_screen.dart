@@ -24,8 +24,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
-  //final TextEditingController _dateController = TextEditingController();
-  //final TextEditingController _categoryController = TextEditingController();
 
   bool _isLoading = false;
 
