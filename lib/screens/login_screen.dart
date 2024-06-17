@@ -5,7 +5,7 @@ import 'package:find_it/screens/Register_screen.dart';
 import 'package:find_it/utils/utils.dart';
 import 'package:find_it/widgets/text_field_input.dart';
 
-// ignore: must_be_immutable
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -77,10 +77,13 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               Flexible(flex: 2, child: Container()),
               // Image
-              Image.asset(
-                'assets/namer.png',
-                color: Colors.white,
-                height: 64,
+              Text(
+                'Find It',
+                style: TextStyle(
+                  fontSize: 60,
+                  color: Colors.blue[900],
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               const SizedBox(height: 32), // Increased spacing
               // Text field input for email

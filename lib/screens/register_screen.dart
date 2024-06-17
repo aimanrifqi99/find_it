@@ -183,7 +183,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       gradient: LinearGradient(
                         colors: [
                           Color.fromARGB(255, 54, 17, 216),
-                      Colors.white,
+                          Colors.black
                         ],
                       ),
                     ),
@@ -196,7 +196,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         : const Text(
                             "Sign Up",
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

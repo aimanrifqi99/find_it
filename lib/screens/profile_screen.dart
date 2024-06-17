@@ -65,6 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           )
         : Scaffold(
             appBar: AppBar(
+              automaticallyImplyLeading: false,
               title: Text(userData['username']),
               centerTitle: false,
             ),
@@ -100,12 +101,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ],
                                 ),
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    FirebaseAuth.instance.currentUser!.uid ==
-                                            widget.uid
-                                        ? EditButton(
+                                    FirebaseAuth.instance.currentUser!.uid == widget.uid ?
+                                    EditButton(
                                             backgroundColor:
                                             Colors.black,
                                             borderColor: Colors.grey,

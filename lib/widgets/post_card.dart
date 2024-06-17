@@ -1,11 +1,8 @@
-//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:find_it/resources/firestore_method.dart';
 import 'package:find_it/screens/comment_screen.dart';
-//import 'package:lostthingfindapplication/utils/colors.dart';
-//import 'package:lostthingfindapplication/utils/utils.dart';
-//import 'package:flutter/src/rendering/box.dart';
+
 
 class PostCard extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables

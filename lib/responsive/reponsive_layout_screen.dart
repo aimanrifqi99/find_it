@@ -49,6 +49,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.blue, // Set your preferred color
         title: const Text(
           'Find Your Lost Items',
