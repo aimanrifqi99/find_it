@@ -56,14 +56,16 @@ class FirestoreMethods {
     return res;
   }
 
-   Future<String> postComment(String postId, String text, String uid,
+  Future<String> postComment(String postId, String text, String uid,
       String name, String profilePic) async {
     String res = "Some error occurred";
     try {
       if (text.isNotEmpty) {
-        // if the likes list contains the user uid, we need to remove it
+        // Generate a unique commentId using Uuid package
         String commentId = const Uuid().v1();
-        _firestore
+
+        // Access Firestore instance and set the comment document
+        await _firestore
             .collection('posts')
             .doc(postId)
             .collection('comments')
@@ -76,15 +78,20 @@ class FirestoreMethods {
           'commentId': commentId,
           'datePublished': DateTime.now(),
         });
+
+        // If successful, set result to 'success'
         res = 'success';
       } else {
+        // If text is empty, set result to an error message
         res = "Please enter text";
       }
     } catch (err) {
+      // Capture and handle any exceptions
       res = err.toString();
     }
     return res;
   }
+
 
 
   //deleting a post

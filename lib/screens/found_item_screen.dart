@@ -14,6 +14,7 @@ class _FoundItemsScreenState extends State<FoundItemsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.purpleAccent, // Change to your desired color
         title: const Text('Found Items'),
         centerTitle: false,

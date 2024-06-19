@@ -14,6 +14,7 @@ class _LostItemsScreenState extends State<LostItemsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.purpleAccent, // Change to your desired color
         title: const Text('Lost Items'),
         centerTitle: false,

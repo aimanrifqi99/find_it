@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:find_it/resources/firestore_method.dart';
@@ -19,22 +20,22 @@ class _PostCardState extends State<PostCard> {
   @override
   void initState() {
     super.initState();
-    //getComments();
+    getComments();
   }
 
-//   void getComments() async {
-//     try {
-//       QuerySnapshot snap = await FirebaseFirestore.instance
-//           .collection('posts')
-//           .doc(widget.snap['postId'])
-//           .collection('comments')
-//           .get();
-//       commentLen = snap.docs.length;
-//     } catch (err) {
-// (context, err.toString(),);
-//     }
-//     setState(() {});
-//   }
+   void getComments() async {
+     try {
+       QuerySnapshot snap = await FirebaseFirestore.instance
+           .collection('posts')
+           .doc(widget.snap['postId'])
+           .collection('comments')
+           .get();
+       commentLen = snap.docs.length;
+     } catch (err) {
+        (context, err.toString(),);
+     }
+     setState(() {});
+   }
 
   @override
   Widget build(BuildContext context) {

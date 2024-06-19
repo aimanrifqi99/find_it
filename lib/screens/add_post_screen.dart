@@ -7,7 +7,6 @@ import 'package:find_it/providers/user_provider.dart';
 import 'package:find_it/resources/firestore_method.dart';
 import 'package:find_it/utils/utils.dart';
 import 'package:provider/provider.dart';
-
 import '../responsive/reponsive_layout_screen.dart';
 
 class AddPostScreen extends StatefulWidget {
