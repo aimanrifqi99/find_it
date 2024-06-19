@@ -48,18 +48,18 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.blue, // Set your preferred color
-        title: const Text(
-          'Find Your Lost Items',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+      // appBar: AppBar(
+      //   automaticallyImplyLeading: false,
+      //   backgroundColor: Colors.purpleAccent, // Set your preferred color
+      //   title: const Text(
+      //     'Find Your Lost Items',
+      //     style: TextStyle(
+      //       color: Colors.white,
+      //       fontSize: 20,
+      //       fontWeight: FontWeight.bold,
+      //     ),
+      //   ),
+      // ),
       body: PageView(
         controller: pageController,
         onPageChanged: onPageChanged,

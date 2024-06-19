@@ -46,7 +46,7 @@ class _PostCardState extends State<PostCard> {
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
+            color: Colors.purpleAccent.withOpacity(0.5),
             spreadRadius: 2,
             blurRadius: 5,
             offset: const Offset(0, 3),
@@ -62,7 +62,7 @@ class _PostCardState extends State<PostCard> {
             child: Row(
               children: [
                 CircleAvatar(
-                  radius: 20,
+                  radius: 25,
                   backgroundImage: NetworkImage(widget.snap['profImage']),
                 ),
                 const SizedBox(width: 8),
@@ -74,7 +74,8 @@ class _PostCardState extends State<PostCard> {
                         widget.snap['username'],
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                          fontSize: 18,
+                          color: Colors.black
                         ),
                       ),
                     ],
@@ -105,7 +106,10 @@ class _PostCardState extends State<PostCard> {
                       ),
                     );
                   },
-                  icon: const Icon(Icons.more_vert),
+                  icon: const Icon(
+                      Icons.more_vert_rounded,
+                    color: Colors.black,
+                  ),
                 ),
               ],
             ),
@@ -133,7 +137,11 @@ class _PostCardState extends State<PostCard> {
             child: Row(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.comment_outlined),
+                  icon: const Icon(
+                      Icons.insert_comment_sharp,
+                    color: Colors.red,
+
+                  ),
                   onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => CommentScreen(
@@ -146,7 +154,7 @@ class _PostCardState extends State<PostCard> {
                   DateFormat.yMMMd()
                       .format(widget.snap['datePublished'].toDate()),
                   style: const TextStyle(
-                    color: Colors.grey,
+                    color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -155,7 +163,7 @@ class _PostCardState extends State<PostCard> {
                   DateFormat('HH:mm:a')
                       .format(widget.snap['timePublished'].toDate()),
                   style: const TextStyle(
-                    color: Colors.grey,
+                    color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -281,12 +289,13 @@ class _PostCardState extends State<PostCard> {
                   Text(
                     "See more",
                     style: TextStyle(
-                      color: Color.fromARGB(255, 1, 38, 101),
+                      color: Colors.white,
                       fontWeight: FontWeight.normal,
-                      fontSize: 12,
+                      fontSize: 15,
                     ),
                   ),
-                  Icon(Icons.more_horiz, color: Color.fromARGB(255, 1, 38, 101)),
+                  SizedBox(width: 10),
+                  Icon(Icons.more_horiz_sharp, color: Colors.white),
                 ],
               ),
             ),

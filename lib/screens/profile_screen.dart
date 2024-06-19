@@ -66,7 +66,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         : Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: false,
-              title: Text(userData['username']),
+              backgroundColor: Colors.purpleAccent,
+              title: Text('Profile'),
               centerTitle: false,
             ),
             body: ListView.builder(

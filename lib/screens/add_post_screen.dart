@@ -190,8 +190,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  icon: const Icon(Icons.drive_folder_upload_outlined,
-                      size: 48, color: Colors.indigo),
+                  icon: const Icon(Icons.image_outlined,
+                      size: 80, color: Colors.indigo),
                   onPressed: () => _selectImage(context),
                 ),
                 const SizedBox(height: 10),
@@ -199,7 +199,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   'Upload Your Post',
                   style: TextStyle(
                     color: Colors.red,
-                    fontSize: 18,
+                    fontSize: 25,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -208,12 +208,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
           )
         : Scaffold(
             appBar: AppBar(
-              backgroundColor: Colors.blue, // Change to your desired color
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {},
-              ),
-              title: const Text('Post to'),
+              backgroundColor: Colors.purpleAccent, // Change to your desired color
+              title: const Text('Add Lost/Found Item'),
               centerTitle: false,
               actions: [],
             ),
@@ -225,7 +221,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       : const Padding(
                           padding: EdgeInsets.only(top: 0),
                         ),
-                  const Divider(),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -257,13 +252,14 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                   child: const Text(
                                     'Selected Image',
                                     style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
                                       fontSize: 16,
                                     ),
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 16),
+                              const SizedBox(height: 20),
+                              const SizedBox(width: 30),
                               Container(
                                 height: 80,
                                 width: 80,
@@ -290,7 +286,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             ],
                           ),
                         ),
-                        const Divider(),
                         const SizedBox(height: 8),
                         Container(
                           decoration: BoxDecoration(
@@ -319,7 +314,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       ],
                     ),
                   ),
-                  const Divider(),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: AnimatedContainer(
@@ -364,7 +358,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       ),
                     ),
                   ),
-                  const Divider(),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Container(
@@ -392,7 +385,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       ),
                     ),
                   ),
-                  const Divider(),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Container(
@@ -459,7 +451,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       ),
                     ),
                   ),
-                  const Divider(),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
@@ -480,10 +471,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 10),
                               decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  bottomLeft: Radius.circular(20),
-                                ),
+                               
                                 color:
                                     isLost ? Colors.transparent : Colors.white,
                               ),
@@ -505,10 +493,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 10),
                               decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(20),
-                                  bottomRight: Radius.circular(20),
-                                ),
                                 color:
                                     isLost ? Colors.white : Colors.transparent,
                               ),
@@ -524,7 +508,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       ),
                     ),
                   ),
-                  const Divider(),
                   const SizedBox(height: 20),
                   Text('Selected: ${isLost ? 'Lost Item' : 'Found Item'}'),
                   ElevatedButton(

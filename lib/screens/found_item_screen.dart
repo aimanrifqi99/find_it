@@ -13,6 +13,12 @@ class _FoundItemsScreenState extends State<FoundItemsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.purpleAccent, // Change to your desired color
+        title: const Text('Found Items'),
+        centerTitle: false,
+        actions: [],
+      ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('posts')

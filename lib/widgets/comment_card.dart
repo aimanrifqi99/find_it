@@ -53,6 +53,7 @@ class CommentCard extends StatelessWidget {
                       style:const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
+                        color: Colors.black54
                       ),
                     ),
                   )
