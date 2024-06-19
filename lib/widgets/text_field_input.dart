@@ -20,14 +20,14 @@ class TextFieldInput extends StatelessWidget {
         hintText: hintText,
         hintStyle:
             const TextStyle(fontWeight: FontWeight.normal,
-              color: Colors.black54), // Set your desired hint text color
+              color: Colors.grey),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
           borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
-          borderSide: const BorderSide(color: Colors.pinkAccent, width: 2.0),
+          borderSide: const BorderSide(color: Colors.purpleAccent, width: 2.0),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),

@@ -6,7 +6,6 @@ import 'package:find_it/screens/comment_screen.dart';
 
 
 class PostCard extends StatefulWidget {
-  // ignore: prefer_typing_uninitialized_variables
   final snap;
   const PostCard({required this.snap, super.key});
 

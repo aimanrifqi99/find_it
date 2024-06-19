@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:find_it/resources/auth_methods.dart';
 import 'package:find_it/screens/login_screen.dart';
 import 'package:find_it/utils/utils.dart';
-import 'package:find_it/widgets/edit_button.dart';
 import 'package:find_it/widgets/post_card.dart';
 
+
 class ProfileScreen extends StatefulWidget {
-  final String uid;
-  const ProfileScreen({required this.uid, super.key});
+  const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -31,15 +30,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
       isLoading = true;
     });
     try {
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser == null) {
+        throw Exception('No user is currently logged in');
+      }
+
       var userSnap = await FirebaseFirestore.instance
           .collection('users')
-          .doc(widget.uid)
+          .doc(currentUser.uid)
           .get();
 
-      // get post lENGTH
       var postSnap = await FirebaseFirestore.instance
           .collection('posts')
-          .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .where('uid', isEqualTo: currentUser.uid)
           .get();
 
       postLen = postSnap.docs.length;
@@ -61,134 +64,139 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return isLoading
         ? const Center(
-            child: CircularProgressIndicator(),
-          )
+      child: CircularProgressIndicator(),
+    )
         : Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              backgroundColor: Colors.purpleAccent,
-              title: Text('Profile'),
-              centerTitle: false,
-            ),
-            body: ListView.builder(
-              itemCount:
-                  2, // Assuming you have two sections: user details and posts
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  // User details section
-                  return Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                         Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.grey,
-                            backgroundImage: NetworkImage(
-                              userData['photoUrl'],
-                            ),
-                            radius: 40,
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Column(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.purpleAccent,
+        title: const Text('Profile'),
+        centerTitle: false,
+      ),
+      body: ListView.builder(
+        itemCount: 2, // Assuming you have two sections: user details and posts
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            // User details section
+            return Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.grey,
+                        backgroundImage: NetworkImage(
+                          userData['photoUrl'] ?? '',
+                        ),
+                        radius: 40,
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceEvenly,
                               children: [
-                                Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    buildStatColumn(postLen, "posts"),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    FirebaseAuth.instance.currentUser!.uid == widget.uid ?
-                                    EditButton(
-                                            backgroundColor:
-                                            Colors.black,
-                                            borderColor: Colors.grey,
-                                            text: "Sign Out",
-                                            textColor: Colors.white,
-                                            function: () async {
-                                              await AuthMethods().signOut();
-                                              if (context.mounted) {
-                                                Navigator.of(context)
-                                                    .pushReplacement(
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const LoginScreen(),
-                                                  ),
-                                                );
-                                              }
-                                            },
-                                          )
-                                        : Container(),
-                                  ],
-                                ),
+                                buildStatColumn(postLen, "posts"),
+                              ],
+
+                            ),
+                            const SizedBox(width: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                TextButton(
+                                  onPressed: () async {
+                                    await AuthMethods().signOut();
+                                    if (context.mounted) {
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (context) => const LoginScreen(),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: Colors.black,
+                                    foregroundColor: Colors.white,
+                                    padding: EdgeInsets.symmetric(horizontal: 60, vertical: 6),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      side: BorderSide(color: Colors.grey),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    "Sign Out",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                )
                               ],
                             ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.only(
-                          top: 15,
-                        ),
-                        child: Text(
-                          userData['username'],
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          ],
                         ),
                       ),
-                      ],
+                    ],
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.only(top: 15),
+                    child: Text(
+                      userData['username'] ?? '',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            // Posts section
+            return postLen > 0
+                ? FutureBuilder(
+              future: FirebaseFirestore.instance
+                  .collection('posts')
+                  .where(
+                'uid',
+                isEqualTo: FirebaseAuth.instance.currentUser!.uid,
+              )
+                  .get(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
                   );
-                } else {
-                  // Posts section
-                  return postLen > 0
-                      ? FutureBuilder(
-                          future: FirebaseFirestore.instance
-                              .collection('posts')
-                              .where(
-                                'uid',
-                                isEqualTo: widget.uid,
-                              )
-                              .get(),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount:
-                                  (snapshot.data! as dynamic).docs.length,
-                              itemBuilder: (context, index) => PostCard(
-                                snap: snapshot.data!.docs[index].data(),
-                              ),
-                            );
-                          },
-                        )
-                      : const Center(
-                          child: Text(
-                            'No posts available.',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        );
                 }
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: (snapshot.data! as QuerySnapshot).docs.length,
+                  itemBuilder: (context, index) => PostCard(
+                    snap: (snapshot.data! as QuerySnapshot).docs[index].data(),
+                  ),
+                );
               },
-            ),
-          );
+            )
+                : const Center(
+              child: Text(
+                'No posts available.',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                ),
+              ),
+            );
+          }
+        },
+      ),
+    );
   }
 
   Column buildStatColumn(int num, String label) {
@@ -201,6 +209,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
         ),
         Container(
@@ -210,11 +219,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w400,
-              color: Colors.grey,
+              color: Colors.black,
             ),
           ),
         ),
       ],
     );
   }
+
+
 }
