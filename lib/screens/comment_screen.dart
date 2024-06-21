@@ -107,7 +107,9 @@ class _CommentScreenState extends State<CommentScreen> {
                     decoration: InputDecoration(
                       hintText: 'Comment as @${user.username}',
                       border: InputBorder.none,
+                      hintStyle: const TextStyle(color: Colors.grey),
                     ),
+                    style: const TextStyle(color: Colors.black),
                   ),
                 ),
               ),
