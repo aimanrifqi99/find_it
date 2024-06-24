@@ -15,6 +15,7 @@ class PostCard extends StatefulWidget {
 
 class _PostCardState extends State<PostCard> {
   int commentLen = 0;
+  bool _showMore = false;
 
   @override
   void initState() {
@@ -29,11 +30,12 @@ class _PostCardState extends State<PostCard> {
           .doc(widget.snap['postId'])
           .collection('comments')
           .get();
-      commentLen = snap.docs.length;
+      setState(() {
+        commentLen = snap.docs.length;
+      });
     } catch (err) {
-      (context, err.toString(),);
+      print(err.toString());
     }
-    setState(() {});
   }
 
   @override
@@ -199,94 +201,15 @@ class _PostCardState extends State<PostCard> {
             padding: const EdgeInsets.all(12),
             child: InkWell(
               onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => Dialog(
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: [
-                        // Title
-                        Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Text(
-                            "Title: ${widget.snap['title']}",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                        // Category
-                        Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Text(
-                            "Category: ${widget.snap['category']}",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                        // Location
-                        Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Text(
-                            "Location: ${widget.snap['location']}",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                        // Date
-                        Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Text(
-                            "Date: ${DateFormat.yMMMd().format(widget.snap['date'].toDate())}",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                        // Description
-                        Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Text(
-                            "Description: ${widget.snap['description']}",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                        // Contact No
-                        Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Text(
-                            "Contact No: ${widget.snap['contactNo']}",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
+                setState(() {
+                  _showMore = !_showMore;
+                });
               },
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "See more",
+                    _showMore ? "See less" : "See more",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.normal,
@@ -294,7 +217,54 @@ class _PostCardState extends State<PostCard> {
                     ),
                   ),
                   SizedBox(width: 10),
-                  Icon(Icons.more_horiz_sharp, color: Colors.white),
+                  Icon(
+                    _showMore ? Icons.expand_less : Icons.more_horiz_sharp,
+                    color: Colors.white,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // Additional information
+          Visibility(
+            visible: _showMore,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Location: ${widget.snap['location']}",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                  Text(
+                    "Date: ${DateFormat.yMMMd().format(widget.snap['date'].toDate())}",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                  Text(
+                    "Description: ${widget.snap['description']}",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                  Text(
+                    "Contact No: ${widget.snap['contactNo']}",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
                 ],
               ),
             ),
