@@ -1,6 +1,5 @@
 import java.util.Properties
 
-
 plugins {
     id "com.android.application"
     id "kotlin-android"
@@ -69,4 +68,7 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'com.google.firebase:firebase-analytics'
+}
