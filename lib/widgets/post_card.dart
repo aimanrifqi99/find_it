@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:find_it/resources/firestore_method.dart';
 import 'package:find_it/screens/comment_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -15,12 +16,22 @@ class PostCard extends StatefulWidget {
 
 class _PostCardState extends State<PostCard> {
   int commentLen = 0;
-  bool _showMore = false;
+  String currentUserId = '';
 
   @override
   void initState() {
     super.initState();
+    getCurrentUserId();
     getComments();
+  }
+
+  void getCurrentUserId() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        currentUserId = user.uid;
+      });
+    }
   }
 
   void getComments() async {
@@ -30,12 +41,11 @@ class _PostCardState extends State<PostCard> {
           .doc(widget.snap['postId'])
           .collection('comments')
           .get();
-      setState(() {
-        commentLen = snap.docs.length;
-      });
+      commentLen = snap.docs.length;
     } catch (err) {
-      print(err.toString());
+      (context, err.toString(),);
     }
+    setState(() {});
   }
 
   @override
@@ -83,36 +93,37 @@ class _PostCardState extends State<PostCard> {
                     ],
                   ),
                 ),
-                IconButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => Dialog(
-                        child: ListView(
-                          shrinkWrap: true,
-                          children: ['Delete']
-                              .map((e) => InkWell(
-                            onTap: () async {
-                              FirestoreMethods()
-                                  .deletePost(widget.snap['postId']);
-                              Navigator.of(context).pop();
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12, horizontal: 16),
-                              child: Text(e),
-                            ),
-                          ))
-                              .toList(),
+                if (currentUserId == widget.snap['uid'])
+                  IconButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => Dialog(
+                          child: ListView(
+                            shrinkWrap: true,
+                            children: ['Delete']
+                                .map((e) => InkWell(
+                              onTap: () async {
+                                FirestoreMethods()
+                                    .deletePost(widget.snap['postId']);
+                                Navigator.of(context).pop();
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 16),
+                                child: Text(e),
+                              ),
+                            ))
+                                .toList(),
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.more_vert_rounded,
-                    color: Colors.black,
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.more_vert_rounded,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
               ],
             ),
           ),
@@ -201,15 +212,94 @@ class _PostCardState extends State<PostCard> {
             padding: const EdgeInsets.all(12),
             child: InkWell(
               onTap: () {
-                setState(() {
-                  _showMore = !_showMore;
-                });
+                showDialog(
+                  context: context,
+                  builder: (context) => Dialog(
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: [
+                        // Title
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Text(
+                            "Title: ${widget.snap['title']}",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                        // Category
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Text(
+                            "Category: ${widget.snap['category']}",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                        // Location
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Text(
+                            "Location: ${widget.snap['location']}",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                        // Date
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Text(
+                            "Date: ${DateFormat.yMMMd().format(widget.snap['date'].toDate())}",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                        // Description
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Text(
+                            "Description: ${widget.snap['description']}",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                        // Contact No
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Text(
+                            "Contact No: ${widget.snap['contactNo']}",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
               },
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    _showMore ? "See less" : "See more",
+                    "See more",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.normal,
@@ -217,54 +307,7 @@ class _PostCardState extends State<PostCard> {
                     ),
                   ),
                   SizedBox(width: 10),
-                  Icon(
-                    _showMore ? Icons.expand_less : Icons.more_horiz_sharp,
-                    color: Colors.white,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          // Additional information
-          Visibility(
-            visible: _showMore,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Location: ${widget.snap['location']}",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),
-                  ),
-                  Text(
-                    "Date: ${DateFormat.yMMMd().format(widget.snap['date'].toDate())}",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),
-                  ),
-                  Text(
-                    "Description: ${widget.snap['description']}",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),
-                  ),
-                  Text(
-                    "Contact No: ${widget.snap['contactNo']}",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),
-                  ),
+                  Icon(Icons.more_horiz_sharp, color: Colors.white),
                 ],
               ),
             ),
