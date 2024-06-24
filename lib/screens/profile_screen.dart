@@ -6,7 +6,6 @@ import 'package:find_it/screens/login_screen.dart';
 import 'package:find_it/utils/utils.dart';
 import 'package:find_it/widgets/post_card.dart';
 
-
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -69,9 +68,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
         : Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.purpleAccent,
+        backgroundColor: Colors.blueAccent,
         title: const Text('Profile'),
         centerTitle: false,
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await AuthMethods().signOut();
+              if (context.mounted) {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const LoginScreen(),
+                  ),
+                );
+              }
+            },
+            icon: Icon(Icons.logout),
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: 2, // Assuming you have two sections: user details and posts
@@ -102,40 +116,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               children: [
                                 buildStatColumn(postLen, "posts"),
                               ],
-
-                            ),
-                            const SizedBox(width: 20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                TextButton(
-                                  onPressed: () async {
-                                    await AuthMethods().signOut();
-                                    if (context.mounted) {
-                                      Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                          builder: (context) => const LoginScreen(),
-                                        ),
-                                      );
-                                    }
-                                  },
-                                  style: TextButton.styleFrom(
-                                    backgroundColor: Colors.black,
-                                    foregroundColor: Colors.white,
-                                    padding: EdgeInsets.symmetric(horizontal: 60, vertical: 6),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15),
-                                      side: BorderSide(color: Colors.grey),
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    "Sign Out",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                )
-                              ],
                             ),
                           ],
                         ),
@@ -164,7 +144,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   .collection('posts')
                   .where(
                 'uid',
-                isEqualTo: FirebaseAuth.instance.currentUser!.uid,
+                isEqualTo:
+                FirebaseAuth.instance.currentUser!.uid,
               )
                   .get(),
               builder: (context, snapshot) {
@@ -176,9 +157,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 return ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: (snapshot.data! as QuerySnapshot).docs.length,
+                  itemCount:
+                  (snapshot.data! as QuerySnapshot).docs.length,
                   itemBuilder: (context, index) => PostCard(
-                    snap: (snapshot.data! as QuerySnapshot).docs[index].data(),
+                    snap: (snapshot.data! as QuerySnapshot)
+                        .docs[index]
+                        .data(),
                   ),
                 );
               },
@@ -226,6 +210,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ],
     );
   }
-
-
 }

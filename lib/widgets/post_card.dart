@@ -4,9 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:find_it/resources/firestore_method.dart';
 import 'package:find_it/screens/comment_screen.dart';
 
-
 class PostCard extends StatefulWidget {
   final snap;
+
   const PostCard({required this.snap, super.key});
 
   @override
@@ -22,19 +22,19 @@ class _PostCardState extends State<PostCard> {
     getComments();
   }
 
-   void getComments() async {
-     try {
-       QuerySnapshot snap = await FirebaseFirestore.instance
-           .collection('posts')
-           .doc(widget.snap['postId'])
-           .collection('comments')
-           .get();
-       commentLen = snap.docs.length;
-     } catch (err) {
-        (context, err.toString(),);
-     }
-     setState(() {});
-   }
+  void getComments() async {
+    try {
+      QuerySnapshot snap = await FirebaseFirestore.instance
+          .collection('posts')
+          .doc(widget.snap['postId'])
+          .collection('comments')
+          .get();
+      commentLen = snap.docs.length;
+    } catch (err) {
+      (context, err.toString(),);
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +42,11 @@ class _PostCardState extends State<PostCard> {
       width: double.infinity,
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: const Color.fromRGBO(62, 61, 93, 0.277),
+        color: Color.fromRGBO(182, 208, 226, 1), // Set the color here
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: Colors.purpleAccent.withOpacity(0.5),
+            color: Colors.lightBlueAccent.withOpacity(0.5),
             spreadRadius: 2,
             blurRadius: 5,
             offset: const Offset(0, 3),
@@ -75,7 +75,7 @@ class _PostCardState extends State<PostCard> {
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
-                          color: Colors.black
+                          color: Colors.black,
                         ),
                       ),
                     ],
@@ -90,24 +90,24 @@ class _PostCardState extends State<PostCard> {
                           shrinkWrap: true,
                           children: ['Delete']
                               .map((e) => InkWell(
-                                    onTap: () async {
-                                      FirestoreMethods()
-                                          .deletePost(widget.snap['postId']);
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 12, horizontal: 16),
-                                      child: Text(e),
-                                    ),
-                                  ))
+                            onTap: () async {
+                              FirestoreMethods()
+                                  .deletePost(widget.snap['postId']);
+                              Navigator.of(context).pop();
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 12, horizontal: 16),
+                              child: Text(e),
+                            ),
+                          ))
                               .toList(),
                         ),
                       ),
                     );
                   },
                   icon: const Icon(
-                      Icons.more_vert_rounded,
+                    Icons.more_vert_rounded,
                     color: Colors.black,
                   ),
                 ),
@@ -133,14 +133,13 @@ class _PostCardState extends State<PostCard> {
 
           // Comments section
           Padding(
-            padding: const EdgeInsets.only(left:12),
+            padding: const EdgeInsets.only(left: 12),
             child: Row(
               children: [
                 IconButton(
                   icon: const Icon(
-                      Icons.insert_comment_sharp,
+                    Icons.insert_comment_sharp,
                     color: Colors.red,
-
                   ),
                   onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(
@@ -174,7 +173,7 @@ class _PostCardState extends State<PostCard> {
           const Divider(),
           // Title
           Padding(
-            padding: const EdgeInsets.only(left: 12,top:10),
+            padding: const EdgeInsets.only(left: 12, top: 10),
             child: Text(
               "Title: ${widget.snap['title']}",
               style: const TextStyle(
@@ -185,7 +184,7 @@ class _PostCardState extends State<PostCard> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 12,top:10),
+            padding: const EdgeInsets.only(left: 12, top: 10),
             child: Text(
               "Category: ${widget.snap['category']}",
               style: const TextStyle(

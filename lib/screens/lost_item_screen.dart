@@ -15,7 +15,7 @@ class _LostItemsScreenState extends State<LostItemsScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.purpleAccent, // Change to your desired color
+        backgroundColor: Colors.blueAccent, // Change to your desired color
         title: const Text('Lost Items'),
         centerTitle: false,
         actions: [],

@@ -5,7 +5,6 @@ import 'package:find_it/screens/Register_screen.dart';
 import 'package:find_it/utils/utils.dart';
 import 'package:find_it/widgets/text_field_input.dart';
 
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -37,9 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (res == "success") {
       // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const MobileScreenLayout()
-        ),
+        MaterialPageRoute(builder: (context) => const MobileScreenLayout()),
       );
       setState(() {
         _isLoading = false;
@@ -70,13 +67,17 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 32),
           width: double.infinity,
           height: MediaQuery.of(context).size.height,
-          color: Colors.white, // Added background color
+          color: Colors.white,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Flexible(flex: 2, child: Container()),
-              // Image
+              Image.asset(
+                'assets/logo2.png', // Path to the logo image
+                height: 100,
+              ),
+              const SizedBox(height: 32),
               Text(
                 'Find It',
                 style: TextStyle(
@@ -85,15 +86,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              const SizedBox(height: 32), // Increased spacing
-              // Text field input for email
+              const SizedBox(height: 32),
               TextFieldInput(
                 textEditingController: _emailController,
                 hintText: "Enter your email",
                 textInputType: TextInputType.emailAddress,
               ),
-              const SizedBox(height: 16), // Increased spacing
-              // Text field input for password
+              const SizedBox(height: 16),
               TextFieldInput(
                 textEditingController: _passwordController,
                 hintText: "Enter your password",
@@ -112,21 +111,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     gradient: LinearGradient(
                       colors: [
                         Color.fromARGB(255, 54, 17, 216),
-                    Colors.black
+                        Colors.black,
                       ],
                     ),
                   ),
                   child: !_isLoading
                       ? const Text(
-                          'Log In',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
+                    'Log In',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
                       : const CircularProgressIndicator(
-                          color: Colors.white,
-                        ),
+                    color: Colors.white,
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -144,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         "Register ",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 251, 80, 42),
+                          color: Colors.black87,
                         ),
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -160,3 +159,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
+
+

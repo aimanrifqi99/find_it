@@ -197,7 +197,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 const Text(
                   'Upload Your Post',
                   style: TextStyle(
-                    color: Colors.red,
+                    color: Colors.blueAccent,
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
                   ),

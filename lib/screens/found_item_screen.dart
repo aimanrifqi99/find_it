@@ -15,7 +15,7 @@ class _FoundItemsScreenState extends State<FoundItemsScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.purpleAccent, // Change to your desired color
+        backgroundColor: Colors.blueAccent, // Change to your desired color
         title: const Text('Found Items'),
         centerTitle: false,
         actions: [],

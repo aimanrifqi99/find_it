@@ -7,10 +7,10 @@ class TextFieldInput extends StatelessWidget {
   final TextInputType textInputType;
   const TextFieldInput(
       {super.key,
-      required this.textEditingController,
-      required this.hintText,
-      this.isPass = false,
-      required this.textInputType});
+        required this.textEditingController,
+        required this.hintText,
+        this.isPass = false,
+        required this.textInputType});
 
   @override
   Widget build(BuildContext context) {
@@ -18,23 +18,24 @@ class TextFieldInput extends StatelessWidget {
       controller: textEditingController,
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle:
-            const TextStyle(fontWeight: FontWeight.normal,
-              color: Colors.grey),
+        hintStyle: const TextStyle(
+          fontWeight: FontWeight.normal,
+          color: Colors.grey,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
           borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
-          borderSide: const BorderSide(color: Colors.purpleAccent, width: 2.0),
+          borderSide: const BorderSide(color: Color.fromARGB(255, 0, 0, 139), width: 2.0), // Dark Blue
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
           borderSide: BorderSide.none,
         ),
         filled: true,
-        fillColor: const Color.fromARGB(255, 255, 240, 245), // Light Pink
+        fillColor: const Color.fromARGB(255, 224, 255, 255), // Lighter Blue
         contentPadding: const EdgeInsets.all(16),
       ),
       keyboardType: textInputType,
