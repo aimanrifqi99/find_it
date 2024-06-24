@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -173,7 +172,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
   void dispose() {
     super.dispose();
     _descriptionController.dispose();
-    // _categoryController.dispose();
     _locationController.dispose();
     _dateController.dispose();
     _titleController.dispose();
