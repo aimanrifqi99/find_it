@@ -17,6 +17,7 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> {
   int commentLen = 0;
   String currentUserId = '';
+  bool expanded = false;
 
   @override
   void initState() {
@@ -43,7 +44,7 @@ class _PostCardState extends State<PostCard> {
           .get();
       commentLen = snap.docs.length;
     } catch (err) {
-      (context, err.toString(),);
+      print('Error fetching comments: $err');
     }
     setState(() {});
   }
@@ -104,8 +105,8 @@ class _PostCardState extends State<PostCard> {
                             children: ['Delete']
                                 .map((e) => InkWell(
                               onTap: () async {
-                                FirestoreMethods()
-                                    .deletePost(widget.snap['postId']);
+                                FirestoreMethods().deletePost(
+                                    widget.snap['postId']);
                                 Navigator.of(context).pop();
                               },
                               child: Container(
@@ -212,106 +213,108 @@ class _PostCardState extends State<PostCard> {
             padding: const EdgeInsets.all(12),
             child: InkWell(
               onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => Dialog(
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: [
-                        // Title
-                        Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Text(
-                            "Title: ${widget.snap['title']}",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                        // Category
-                        Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Text(
-                            "Category: ${widget.snap['category']}",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                        // Location
-                        Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Text(
-                            "Location: ${widget.snap['location']}",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                        // Date
-                        Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Text(
-                            "Date: ${DateFormat.yMMMd().format(widget.snap['date'].toDate())}",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                        // Description
-                        Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Text(
-                            "Description: ${widget.snap['description']}",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                        // Contact No
-                        Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Text(
-                            "Contact No: ${widget.snap['contactNo']}",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
+                setState(() {
+                  expanded = !expanded;
+                });
               },
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "See more",
-                    style: TextStyle(
+                    expanded ? "See less" : "See more",
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.normal,
                       fontSize: 15,
                     ),
                   ),
                   SizedBox(width: 10),
-                  Icon(Icons.more_horiz_sharp, color: Colors.white),
+                  Icon(
+                    expanded
+                        ? Icons.expand_less_rounded
+                        : Icons.expand_more_rounded,
+                    color: Colors.white,
+                  ),
                 ],
               ),
             ),
           ),
+
+          // Additional content to show when expanded
+          if (expanded) ...[
+            // Title
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Text(
+                "Title: ${widget.snap['title']}",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+            // Category
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Text(
+                "Category: ${widget.snap['category']}",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+            // Location
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Text(
+                "Location: ${widget.snap['location']}",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+            // Date
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Text(
+                "Date: ${DateFormat.yMMMd().format(widget.snap['date'].toDate())}",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+            // Description
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Text(
+                "Description: ${widget.snap['description']}",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+            // Contact No
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Text(
+                "Contact No: ${widget.snap['contactNo']}",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
