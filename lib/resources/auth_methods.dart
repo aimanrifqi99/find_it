@@ -10,14 +10,10 @@ class AuthMethods {
 
   Future<model.User> getUserDetails() async {
     User currentUser = _auth.currentUser!;
-
-    DocumentSnapshot snap =
-    await _firestore.collection('users').doc(currentUser.uid).get();
-
-    return model.User.fromSnapshot(snap); // Corrected method name
+    DocumentSnapshot snap = await _firestore.collection('users').doc(currentUser.uid).get();
+    return model.User.fromSnapshot(snap);
   }
 
-  // Sign up for users
   Future<String> signUpUser({
     required String email,
     required String password,
@@ -27,17 +23,11 @@ class AuthMethods {
   }) async {
     String res = "Some error occurred";
     try {
-      if (email.isNotEmpty ||
-          password.isNotEmpty ||
-          username.isNotEmpty ||
-          contactNo.isNotEmpty ||
-          file != null) {
+      if (email.isNotEmpty && password.isNotEmpty && username.isNotEmpty && contactNo.isNotEmpty && file != null) {
         // Register user
-        UserCredential cred = await _auth.createUserWithEmailAndPassword(
-            email: email, password: password);
+        UserCredential cred = await _auth.createUserWithEmailAndPassword(email: email, password: password);
 
-        String photoUrl = await StorageMethods()
-            .uploadImageToStorage('profilePics', file, false);
+        String photoUrl = await StorageMethods().uploadImageToStorage('profilePics', file, false);
 
         // Add user to database
         model.User user = model.User(
@@ -48,10 +38,7 @@ class AuthMethods {
           photoUrl: photoUrl,
         );
 
-        await _firestore
-            .collection('users')
-            .doc(cred.user!.uid)
-            .set(user.toJson());
+        await _firestore.collection('users').doc(cred.user!.uid).set(user.toJson());
 
         res = "success";
       }
@@ -61,7 +48,6 @@ class AuthMethods {
     return res;
   }
 
-  // Login user
   Future<String> loginUser({
     required String email,
     required String password,
@@ -70,8 +56,7 @@ class AuthMethods {
 
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
-        await _auth.signInWithEmailAndPassword(
-            email: email, password: password);
+        await _auth.signInWithEmailAndPassword(email: email, password: password);
         res = "success";
       } else {
         res = "Please enter all the fields";
@@ -82,8 +67,15 @@ class AuthMethods {
     return res;
   }
 
-  // Sign out user
   Future<void> signOut() async {
     await _auth.signOut();
+  }
+
+  Future<void> updateUserProfile(model.User updatedUser) async {
+    try {
+      await _firestore.collection('users').doc(updatedUser.uid).update(updatedUser.toJson());
+    } catch (e) {
+      throw e; // Handle or rethrow the exception as needed
+    }
   }
 }

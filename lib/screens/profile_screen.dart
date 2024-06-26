@@ -5,7 +5,7 @@ import 'package:find_it/models/user.dart' as model;
 import 'package:find_it/screens/login_screen.dart';
 import 'package:find_it/widgets/post_card.dart';
 import 'package:find_it/utils/utils.dart';
-import 'package:find_it/screens/edit_profile_screen.dart';
+
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -82,22 +82,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             },
             icon: const Icon(Icons.logout),
           ),
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditProfileScreen(
-                    currentUser: currentUser,
-                  ),
-                ),
-              ).then((_) {
-                // Refresh profile data after editing
-                getData();
-              });
-            },
-            icon: const Icon(Icons.edit),
-          ),
         ],
       ),
       body: ListView.builder(
@@ -157,8 +141,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   .collection('posts')
                   .where(
                 'uid',
-                isEqualTo: FirebaseAuth
-                    .instance.currentUser!.uid,
+                isEqualTo:
+                FirebaseAuth.instance.currentUser!.uid,
               )
                   .get(),
               builder: (context, snapshot) {
