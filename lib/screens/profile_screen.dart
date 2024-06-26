@@ -1,20 +1,21 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:find_it/resources/auth_methods.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:find_it/models/user.dart' as model;
 import 'package:find_it/screens/login_screen.dart';
-import 'package:find_it/utils/utils.dart';
 import 'package:find_it/widgets/post_card.dart';
+import 'package:find_it/utils/utils.dart';
+import 'package:find_it/screens/edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  var userData = {};
+  late model.User currentUser;
   int postLen = 0;
   bool isLoading = false;
 
@@ -24,39 +25,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
     getData();
   }
 
-  getData() async {
+  Future<void> getData() async {
     setState(() {
       isLoading = true;
     });
     try {
-      User? currentUser = FirebaseAuth.instance.currentUser;
-      if (currentUser == null) {
+      User? firebaseUser = FirebaseAuth.instance.currentUser;
+      if (firebaseUser == null) {
         throw Exception('No user is currently logged in');
       }
 
       var userSnap = await FirebaseFirestore.instance
           .collection('users')
-          .doc(currentUser.uid)
+          .doc(firebaseUser.uid)
           .get();
 
       var postSnap = await FirebaseFirestore.instance
           .collection('posts')
-          .where('uid', isEqualTo: currentUser.uid)
+          .where('uid', isEqualTo: firebaseUser.uid)
           .get();
 
       postLen = postSnap.docs.length;
-      userData = userSnap.data()!;
+      currentUser = model.User.fromSnapshot(userSnap);
 
       setState(() {});
     } catch (e) {
-      showSnackBar(
-        context,
-        e.toString(),
-      );
+      showSnackBar(context, 'Error fetching data: ${e.toString()}');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
-    setState(() {
-      isLoading = false;
-    });
   }
 
   @override
@@ -74,16 +73,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
         actions: [
           IconButton(
             onPressed: () async {
-              await AuthMethods().signOut();
-              if (context.mounted) {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => const LoginScreen(),
-                  ),
-                );
-              }
+              await FirebaseAuth.instance.signOut();
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => const LoginScreen(),
+                ),
+              );
             },
-            icon: Icon(Icons.logout),
+            icon: const Icon(Icons.logout),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditProfileScreen(
+                    currentUser: currentUser,
+                  ),
+                ),
+              ).then((_) {
+                // Refresh profile data after editing
+                getData();
+              });
+            },
+            icon: const Icon(Icons.edit),
           ),
         ],
       ),
@@ -101,7 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       CircleAvatar(
                         backgroundColor: Colors.grey,
                         backgroundImage: NetworkImage(
-                          userData['photoUrl'] ?? '',
+                          currentUser.photoUrl ?? '',
                         ),
                         radius: 40,
                       ),
@@ -126,7 +139,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     alignment: Alignment.centerLeft,
                     padding: const EdgeInsets.only(top: 15),
                     child: Text(
-                      userData['username'] ?? '',
+                      currentUser.username ?? '',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
@@ -144,8 +157,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   .collection('posts')
                   .where(
                 'uid',
-                isEqualTo:
-                FirebaseAuth.instance.currentUser!.uid,
+                isEqualTo: FirebaseAuth
+                    .instance.currentUser!.uid,
               )
                   .get(),
               builder: (context, snapshot) {

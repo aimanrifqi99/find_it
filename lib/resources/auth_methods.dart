@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import "package:firebase_auth/firebase_auth.dart";
-import 'package:flutter/foundation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:find_it/models/user.dart' as model;
 import 'package:find_it/resources/storage_methods.dart';
 
@@ -13,12 +12,12 @@ class AuthMethods {
     User currentUser = _auth.currentUser!;
 
     DocumentSnapshot snap =
-        await _firestore.collection('users').doc(currentUser.uid).get();
+    await _firestore.collection('users').doc(currentUser.uid).get();
 
-    return model.User.fromSnap(snap);
+    return model.User.fromSnapshot(snap); // Corrected method name
   }
 
-  //sign up for users
+  // Sign up for users
   Future<String> signUpUser({
     required String email,
     required String password,
@@ -32,19 +31,15 @@ class AuthMethods {
           password.isNotEmpty ||
           username.isNotEmpty ||
           contactNo.isNotEmpty ||
-          // ignore: unnecessary_null_comparison
           file != null) {
-        //register user
+        // Register user
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
-
-        // ignore: avoid_print
-        print(cred.user!.uid);
 
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('profilePics', file, false);
 
-        //add user to database
+        // Add user to database
         model.User user = model.User(
           email: email,
           username: username,
@@ -66,13 +61,15 @@ class AuthMethods {
     return res;
   }
 
-  //login in user
-  Future<String> loginUser(
-      {required String email, required String password}) async {
+  // Login user
+  Future<String> loginUser({
+    required String email,
+    required String password,
+  }) async {
     String res = "Some error occurred";
 
     try {
-      if (email.isNotEmpty || password.isNotEmpty) {
+      if (email.isNotEmpty && password.isNotEmpty) {
         await _auth.signInWithEmailAndPassword(
             email: email, password: password);
         res = "success";
@@ -85,6 +82,7 @@ class AuthMethods {
     return res;
   }
 
+  // Sign out user
   Future<void> signOut() async {
     await _auth.signOut();
   }
