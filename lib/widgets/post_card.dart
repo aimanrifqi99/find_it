@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:find_it/resources/firestore_method.dart';
 import 'package:find_it/screens/comment_screen.dart';
+import 'package:find_it/screens/edit_post_screen.dart'; // Import the new screen
 import 'package:firebase_auth/firebase_auth.dart';
 
 class PostCard extends StatefulWidget {
@@ -46,7 +47,27 @@ class _PostCardState extends State<PostCard> {
     } catch (err) {
       print('Error fetching comments: $err');
     }
-    setState(() {});
+
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  void editPost() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => EditPostScreen(
+          postId: widget.snap['postId'],
+          initialData: {
+            'title': widget.snap['title'],
+            'description': widget.snap['description'],
+            'location': widget.snap['location'],
+            'category': widget.snap['category'],
+            'date': widget.snap['date'],
+          },
+        ),
+      ),
+    );
   }
 
   @override
@@ -100,22 +121,24 @@ class _PostCardState extends State<PostCard> {
                       showDialog(
                         context: context,
                         builder: (context) => Dialog(
-                          child: ListView(
-                            shrinkWrap: true,
-                            children: ['Delete']
-                                .map((e) => InkWell(
-                              onTap: () async {
-                                FirestoreMethods().deletePost(
-                                    widget.snap['postId']);
-                                Navigator.of(context).pop();
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 12, horizontal: 16),
-                                child: Text(e),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.edit),
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // Close the dialog before navigation
+                                  editPost();
+                                },
                               ),
-                            ))
-                                .toList(),
+                              IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () {
+                                  FirestoreMethods().deletePost(widget.snap['postId']);
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
                           ),
                         ),
                       );
@@ -254,19 +277,6 @@ class _PostCardState extends State<PostCard> {
                 ),
               ),
             ),
-            // Category
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              child: Text(
-                "Category: ${widget.snap['category']}",
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                ),
-              ),
-            ),
-            // Location
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Text(

@@ -92,7 +92,13 @@ class FirestoreMethods {
     return res;
   }
 
-
+  Future<void> updatePost(String postId, Map<String, dynamic> postData) async {
+    try {
+      await _firestore.collection('posts').doc(postId).update(postData);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
   //deleting a post
 

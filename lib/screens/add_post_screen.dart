@@ -205,10 +205,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
           )
         : Scaffold(
             appBar: AppBar(
-              backgroundColor: Colors.purpleAccent, // Change to your desired color
+              backgroundColor: Colors.blueAccent, // Change to your desired color
               title: const Text('Add Lost/Found Item'),
               centerTitle: false,
               actions: [],
+
             ),
             body: SingleChildScrollView(
               child: Column(
